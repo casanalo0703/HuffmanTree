@@ -1,0 +1,5 @@
+Hola mundo
+Este es un texto de prueba
+123456789 #$%
+Vamos a comprimir este archivo :D
+/*-+/()='?_:-
