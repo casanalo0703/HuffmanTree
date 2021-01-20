@@ -172,3 +172,7 @@ fabric.properties
 .idea/codestream.xml
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij,eclipse
+/.classpath
+/.project
+/Hoffman.iml
+/.idea/
