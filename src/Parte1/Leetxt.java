@@ -1,5 +1,7 @@
 package Parte1;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
@@ -12,16 +14,17 @@ import java.util.BitSet;
 
 @SuppressWarnings("ALL")
 public class Leetxt {
-	
-	//tamano del Arraylist
+
 	int tam;
-	//guarda las direcciones de los nodos en el arbol
-	String[] x=new String[256];
+	//ASCII tiene 256 characteres, si se quiere usar UTF-8 u otro necesita hacer mas grande el arreglo
+	//ASCII is composed of 256 characters, if you want to use UTF-8 or other you need to make this array bigger
+	String[] character = new String[256];
 	//Bitset para el header
 	BitSet guarda=new BitSet();
 	
-	//lee texto
-	/*void lee (String archivo) throws IOException, FileNotFoundException {
+	//lee texto, solo se necesita si se quiere corroborar que el texto es propiamente leido
+	//outputs the text, if you want to see if the text if being read correctly use it, otherwise is unnesesary
+	void lee (String archivo) throws IOException, FileNotFoundException {
 		String cadena;
 		FileReader file= new FileReader(archivo);
 		BufferedReader b = new BufferedReader(file);
@@ -30,8 +33,10 @@ public class Leetxt {
 		}
 		b.close();
 		cuentaletras(archivo);
-	}*/
-	
+	}
+
+	//busca el archivo y guarda en una tabla de int en la pos en ASCII las veces que se repite una letra
+	//finds the file and saves how many times a letter has been seen using their ASCII value
 	int[] cuentaletras(String archivo) throws IOException, FileNotFoundException
 	{
 		FileReader file= new FileReader(archivo);
@@ -39,6 +44,7 @@ public class Leetxt {
 		String linea;
 		int[] rep=new int[256];
 		//cuenta las repeticiones
+		//conts the letters
 		while((linea=b.readLine())!=null)
 		{
 			char[] ch= linea.toCharArray();
@@ -49,7 +55,8 @@ public class Leetxt {
 			rep['\n']++;
 		}
 		b.close();
-		//imprime las rep
+		//imprime la tabla, no es necesaria esta parte
+		//prints the table, it is not necessary
 		/*for(int i=0;i<rep.length;i++)
 		{
 			if(rep[i]>0)
@@ -58,10 +65,11 @@ public class Leetxt {
 		return rep;
 	}
 	
-	ArrayList<NodoH> lista(int[] rep)
+	ArrayList<NodoH> lista(int @NotNull [] rep)
 	{
 		ArrayList<NodoH> lista= new ArrayList<NodoH>();
-		//crea el Array List acomodado
+		//acomoda los elementos de la tabla y los inserta en un ArrayList
+		//Sorts the elements of the table and inserts them in an ArrayList
 		for(int i=0;i<rep.length;i++)
 		{
 			if(rep[i]>0)
@@ -75,7 +83,8 @@ public class Leetxt {
 		}
 		lista.sort(null);
 		tam=lista.size();
-	//imprime	
+		//imprime el ArrayList
+		//prints the ArrayList
 		/*for(int i=0;i<lista.size();i++)
 		{
 			System.out.println(lista.get(i).c+" "+lista.get(i).repeticion);
@@ -85,7 +94,8 @@ public class Leetxt {
 	
 	NodoH creaArbol(ArrayList<NodoH> lista)
 	{
-		//crea los nodos y los acomoda en la lista
+		//creates the tree in the arrayList and then pops the tree out
+		//crea el arbol dentro del ArrayList y al final saca el arbol de la lista
 		while(lista.size()>1)
 		{
 			NodoH aux= new NodoH();
@@ -105,31 +115,36 @@ public class Leetxt {
 		{
 			return;
 		}
-		//va recorriendo el arbol y aconodando 1's y 0's
-		if(arbol.hoja==true)
+		//navigates through the tree, this function creates the bynary string
+		//va recorriendo el arbol, el mettodo crea un String binario
+		if(arbol.hoja)
 		{
 			S=S.concat("1");
-			x[arbol.c]=S;
+			character[arbol.c]=S;
 			return;
 		}
 		S=S.concat("0");
+
 		abolabin(arbol.hijoi,S);
 		S=S.substring(0, S.length()-1);
 		S=S.concat("1");
 		abolabin(arbol.hijod,S);
 		S=S.substring(0, S.length()-1);
-		//imprime el arreglo con las direcciones
-		/*for(int i=0;i<x.length;i++)
+		//imprime el String
+		//prints the String
+		/*for(int i=0;i<character.length;i++)
 		{
-			if(x[i]!=null)
+			if(character[i]!=null)
 			{
-				System.out.println((char)i + " "+x[i]);
+				System.out.println((char)i + " "+character[i]);
 			}
 		}*/
 	}
 	
 	void comprime()
 	{
+		//creates a byte array with the string
+		//crea un byte array con el String
 		int tama=(2*tam)+1;
 		byte[] aux=new byte[tama];
 		aux[0]=(byte)tam;
@@ -139,14 +154,14 @@ public class Leetxt {
 		for(int i=1;i<tama;i++)
 		{
 			//descarta los espacios con null
-			while(x[j]==null)
+			while(character[j]==null)
 			{
-				if(j<x.length-1)
+				if(j<character.length-1)
 					j++;
 			}
 			aux[i]=(byte)j;
 			i++;
-			aux[i]=(byte)(x[j].length()-1);
+			aux[i]=(byte)(character[j].length()-1);
 			j++;
 		}
 		guarda=BitSet.valueOf(aux);
@@ -157,13 +172,13 @@ public class Leetxt {
 		//escribe las dirrecciones de 1 y 0
 		for(int i=0;i<tam;i++)
 		{
-			while(x[j]==null)
+			while(character[j]==null)
 			{
-				if(j<x.length)
+				if(j<character.length)
 				//recorre los null de nuevo
 				j++;
 			}
-			char[] cod = x[j].toCharArray();
+			char[] cod = character[j].toCharArray();
 			for(int a=0;a<cod.length-1;a++)
 			{
 				guarda.set(despues, cod[a]=='1');
@@ -190,14 +205,14 @@ public class Leetxt {
 			char[] aux=cadena.toCharArray();
 			for(int i=0;i<aux.length;i++)
 			{
-				char[] aux2=x[aux[i]].toCharArray();
+				char[] aux2=character[aux[i]].toCharArray();
 				for(int j=0;j<aux2.length-1;j++)
 				{
 					guarda.set(fin, aux2[j]=='1');
 					fin++;
 				}
 			}
-			char[] aux3=x['\n'].toCharArray();
+			char[] aux3=character['\n'].toCharArray();
 			for(int i=0;i<aux3.length-1;i++)
 			{
 				guarda.set(fin, aux3[i]=='1');

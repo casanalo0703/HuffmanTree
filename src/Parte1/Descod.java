@@ -15,10 +15,10 @@ public class Descod
 	//apuntador para los 2*n+1 posiciones
 	int apunta;
 	
-	BitSet binABit(String dir) throws IOException, FileNotFoundException
+	BitSet binABit(String dir) throws IOException
 	{
 		BitSet aux;
-		byte[] auxBytes=null;
+		byte[] auxBytes;
 		FileInputStream fis=new FileInputStream(dir);
 		DataInputStream dis=new DataInputStream(fis);
 		auxBytes=dis.readAllBytes();
@@ -31,7 +31,7 @@ public class Descod
 	void convArbol(BitSet cod)
 	{
 		byte[] bin=cod.toByteArray();
-		//obtenemos el tamaño de todo
+		//obtenemos el tamano del BitSet
 		int n=bin[0];
 		//creamos apuntador para el arbol
 		apunta=8*(2*n+1);
